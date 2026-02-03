@@ -4,7 +4,7 @@ Configuration Module
 Manages configuration without hard-coded secrets or sensitive data.
 """
 
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 import os
 import yaml
 import json

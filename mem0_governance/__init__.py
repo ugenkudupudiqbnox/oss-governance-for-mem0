@@ -18,9 +18,9 @@ Copyright 2024 - Licensed under Apache-2.0
 __version__ = "0.1.0"
 
 from mem0_governance.rbac import Role, Permission, RBACManager
-from mem0_governance.tenant import TenantContext, TenantManager
+from mem0_governance.tenant import TenantContext, TenantManager, TenantStatus
 from mem0_governance.policy import Policy, PolicyEngine, PolicyDecision
-from mem0_governance.audit import AuditLogger, AuditEvent
+from mem0_governance.audit import AuditLogger, AuditEvent, AuditEventType, AuditSeverity
 from mem0_governance.security import SecretManager, InputValidator
 
 __all__ = [
@@ -29,11 +29,14 @@ __all__ = [
     "RBACManager",
     "TenantContext",
     "TenantManager",
+    "TenantStatus",
     "Policy",
     "PolicyEngine",
     "PolicyDecision",
     "AuditLogger",
     "AuditEvent",
+    "AuditEventType",
+    "AuditSeverity",
     "SecretManager",
     "InputValidator",
 ]
