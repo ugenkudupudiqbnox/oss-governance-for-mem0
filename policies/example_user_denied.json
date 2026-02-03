@@ -1,0 +1,22 @@
+{
+  "description": "Example input for testing the access control policy - User trying to access restricted data (should be denied)",
+  "input": {
+    "user": {
+      "id": "user123",
+      "role": "user",
+      "department": "engineering"
+    },
+    "operation": "mem0_search",
+    "resource": {
+      "type": "memory",
+      "id": "mem_456",
+      "classification": "restricted",
+      "owner_id": "admin789"
+    },
+    "context": {
+      "ip": "10.0.2.100",
+      "time": "2026-02-03T14:30:00Z",
+      "user_agent": "Mozilla/5.0"
+    }
+  }
+}
