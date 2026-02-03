@@ -1,0 +1,37 @@
+# Example Policy: Auditor Role
+#
+# This policy grants auditor permissions for compliance and security monitoring.
+
+id: "auditor-policy"
+name: "Auditor Access Policy"
+version: "1.0"
+description: "Grants auditor access for compliance monitoring"
+
+statements:
+  # Allow audit log access
+  - effect: "allow"
+    actions:
+      - "audit:read"
+      - "audit:export"
+    resources:
+      - "audit:*"
+
+  # Allow read-only access to resources for investigation
+  - effect: "allow"
+    actions:
+      - "memory:read"
+      - "memory:search"
+      - "user:read"
+    resources:
+      - "*"
+
+  # Deny all modifications
+  - effect: "deny"
+    actions:
+      - "memory:write"
+      - "memory:delete"
+      - "user:write"
+      - "user:delete"
+      - "admin:*"
+    resources:
+      - "*"

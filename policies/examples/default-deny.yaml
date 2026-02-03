@@ -1,0 +1,16 @@
+# Example Policy: Default Deny All
+#
+# This is a fail-safe policy that denies all access by default.
+# It should be used as a baseline when no other policies match.
+
+id: "default-deny-all"
+name: "Default Deny All"
+version: "1.0"
+description: "Deny-by-default policy that blocks all actions unless explicitly allowed"
+
+statements:
+  - effect: "deny"
+    actions:
+      - "*"
+    resources:
+      - "*"

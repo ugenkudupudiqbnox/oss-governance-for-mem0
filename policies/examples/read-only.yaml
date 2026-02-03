@@ -1,0 +1,30 @@
+# Example Policy: Read-Only Access
+#
+# This policy allows read-only operations while denying all write operations.
+
+id: "read-only-policy"
+name: "Read-Only Access"
+version: "1.0"
+description: "Allows read operations while denying all write operations"
+
+statements:
+  # Allow read operations
+  - effect: "allow"
+    actions:
+      - "memory:read"
+      - "memory:search"
+      - "user:read"
+      - "audit:read"
+    resources:
+      - "*"
+
+  # Deny write operations
+  - effect: "deny"
+    actions:
+      - "memory:write"
+      - "memory:delete"
+      - "user:write"
+      - "user:delete"
+      - "admin:*"
+    resources:
+      - "*"

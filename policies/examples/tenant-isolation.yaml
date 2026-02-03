@@ -1,0 +1,32 @@
+# Example Policy: Tenant Isolation
+#
+# This policy enforces strict tenant isolation by only allowing
+# access to resources within the same tenant.
+
+id: "tenant-isolation-example"
+name: "Tenant Isolation Policy"
+version: "1.0"
+description: "Enforces tenant isolation for multi-tenant deployments"
+
+statements:
+  # Allow access to own tenant resources
+  - effect: "allow"
+    actions:
+      - "memory:*"
+      - "user:read"
+    resources:
+      - "memory:tenant:${tenant_id}:*"
+      - "user:tenant:${tenant_id}:*"
+    conditions:
+      tenant_id:
+        equals: "${tenant_id}"
+
+  # Explicitly deny cross-tenant access
+  - effect: "deny"
+    actions:
+      - "*"
+    resources:
+      - "*"
+    conditions:
+      tenant_id:
+        not_equals: "${tenant_id}"
