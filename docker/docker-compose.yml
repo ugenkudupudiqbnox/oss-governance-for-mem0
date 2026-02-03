@@ -1,0 +1,51 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: gov_mem0_postgres
+    environment:
+      POSTGRES_DB: governance
+      POSTGRES_USER: governance
+      POSTGRES_PASSWORD: governance
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  opa:
+    image: openpolicyagent/opa:latest
+    container_name: gov_mem0_opa
+    command: ["run", "--server", "--log-level=info", "/policies"]
+    volumes:
+      - ../policies:/policies:ro
+    ports:
+      - "8181:8181"
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0
+    container_name: gov_mem0_keycloak
+    command: start-dev
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8080:8080"
+
+  loki:
+    image: grafana/loki:2.9.0
+    container_name: gov_mem0_loki
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+
+  grafana:
+    image: grafana/grafana:10.2.0
+    container_name: gov_mem0_grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - loki
+
+volumes:
+  postgres_data:
