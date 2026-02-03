@@ -138,7 +138,7 @@ ORDER BY access_count DESC;
 -- Failed access attempts
 SELECT user_id, operation, resource_id, COUNT(*) as failures
 FROM audit_logs
-WHERE status = 'denied'
+WHERE action_result = 'denied'
   AND timestamp >= NOW() - INTERVAL '7 days'
 GROUP BY user_id, operation, resource_id
 HAVING COUNT(*) > 5
