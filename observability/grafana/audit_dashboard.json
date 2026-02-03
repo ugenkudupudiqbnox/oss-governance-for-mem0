@@ -1,0 +1,15 @@
+{
+  "title": "Mem0 Audit Trail",
+  "panels": [
+    {
+      "type": "table",
+      "title": "Audit Events",
+      "targets": [
+        {
+          "expr": "{job=\"audit\"}",
+          "refId": "A"
+        }
+      ]
+    }
+  ]
+}
