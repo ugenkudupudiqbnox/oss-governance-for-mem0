@@ -274,7 +274,7 @@ class SecureMem0Wrapper:
         
         # Log export
         self.audit_logger.log_event(
-            event_type=AuditEventType.SYSTEM_START,
+            event_type=AuditEventType.AUDIT_EXPORT,
             actor_id=requester_id,
             actor_name=requester_name,
             action="export_audit_logs",

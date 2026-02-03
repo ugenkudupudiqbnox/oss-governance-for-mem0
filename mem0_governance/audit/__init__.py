@@ -48,6 +48,10 @@ class AuditEventType(Enum):
     POLICY_DELETE = "policy.delete"
     POLICY_EVALUATE = "policy.evaluate"
     
+    # Audit operations
+    AUDIT_READ = "audit.read"
+    AUDIT_EXPORT = "audit.export"
+    
     # Security events
     SECURITY_ACCESS_DENIED = "security.access_denied"
     SECURITY_VIOLATION = "security.violation"
