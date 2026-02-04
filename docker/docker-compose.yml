@@ -85,6 +85,25 @@ services:
       - "9003:3000"
     volumes:
       - grafana_data:/var/lib/grafana
+    environment:
+      # Grafana server settings
+      GF_SERVER_ROOT_URL: https://grafana.audit.qbnox.com
+      GF_SERVER_DOMAIN: grafana.audit.qbnox.com
+
+      # OAuth via Keycloak
+      GF_AUTH_GENERIC_OAUTH_ENABLED: "true"
+      GF_AUTH_GENERIC_OAUTH_NAME: Keycloak
+      GF_AUTH_GENERIC_OAUTH_CLIENT_ID: grafana
+      GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET: grafana-client-secret
+      GF_AUTH_GENERIC_OAUTH_SCOPES: openid profile email roles
+      GF_AUTH_GENERIC_OAUTH_AUTH_URL: https://iam.audit.qbnox.com/realms/mem0-governance/protocol/openid-connect/auth
+      GF_AUTH_GENERIC_OAUTH_TOKEN_URL: https://iam.audit.qbnox.com/realms/mem0-governance/protocol/openid-connect/token
+      GF_AUTH_GENERIC_OAUTH_API_URL: https://iam.audit.qbnox.com/realms/mem0-governance/protocol/openid-connect/userinfo
+      GF_AUTH_GENERIC_OAUTH_ALLOW_SIGN_UP: "true"
+      GF_AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_PATH: "contains(roles[*], 'admin') && 'Admin' || contains(roles[*], 'auditor') && 'Viewer' || 'Viewer'"
+
+      # Disable default login form (optional - remove if you want both)
+      # GF_AUTH_DISABLE_LOGIN_FORM: "true"
     depends_on:
       - loki
     restart: unless-stopped

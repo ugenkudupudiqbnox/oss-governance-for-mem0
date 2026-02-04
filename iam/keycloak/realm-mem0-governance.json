@@ -3,18 +3,10 @@
   "enabled": true,
   "roles": {
     "realm": [
-      {
-        "name": "admin"
-      },
-      {
-        "name": "agent-reader"
-      },
-      {
-        "name": "agent-writer"
-      },
-      {
-        "name": "auditor"
-      }
+      { "name": "admin" },
+      { "name": "agent-reader" },
+      { "name": "agent-writer" },
+      { "name": "auditor" }
     ]
   },
   "clients": [
@@ -24,6 +16,23 @@
       "publicClient": false,
       "serviceAccountsEnabled": true,
       "directAccessGrantsEnabled": true
+    },
+    {
+      "clientId": "grafana",
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "secret": "grafana-client-secret",
+      "redirectUris": [
+        "https://grafana.audit.qbnox.com/*",
+        "http://localhost:9003/*"
+      ],
+      "webOrigins": [
+        "https://grafana.audit.qbnox.com",
+        "http://localhost:9003"
+      ]
     }
   ]
 }
