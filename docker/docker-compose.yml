@@ -1,51 +1,97 @@
-version: '3.9'
+version: "3.9"
 
 services:
-  postgres:
+
+  # --------------------------------------------------
+  # Keycloak Database (PERSISTENT)
+  # --------------------------------------------------
+  keycloak-db:
     image: postgres:15
-    container_name: gov_mem0_postgres
+    container_name: gov_mem0_keycloak_db
     environment:
-      POSTGRES_DB: governance
-      POSTGRES_USER: governance
-      POSTGRES_PASSWORD: governance
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+      - keycloak_data:/var/lib/postgresql/data
+    restart: unless-stopped
 
-  opa:
-    image: openpolicyagent/opa:latest
-    container_name: gov_mem0_opa
-    command: ["run", "--server", "--log-level=info", "/policies"]
-    volumes:
-      - ../policies:/policies:ro
-    ports:
-      - "8181:8181"
-
+  # --------------------------------------------------
+  # Keycloak IAM (PERSISTENT)
+  # --------------------------------------------------
   keycloak:
     image: quay.io/keycloak/keycloak:24.0
     container_name: gov_mem0_keycloak
     command: start-dev
+    depends_on:
+      - keycloak-db
     environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+
+      KC_PROXY: edge
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME_STRICT: "false"
+      KC_HOSTNAME_STRICT_HTTPS: "false"
+      KC_PROXY_HEADERS: xforwarded
+
+      # Admin credentials (both legacy and new)
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
     ports:
-      - "8080:8080"
+      - "9002:8080"
+    restart: unless-stopped
 
+  # --------------------------------------------------
+  # OPA (POLICY ENGINE – POLICIES AS CODE)
+  # --------------------------------------------------
+  opa:
+    image: openpolicyagent/opa:latest
+    container_name: gov_mem0_opa
+    command:
+      - run
+      - --server
+      - --addr=0.0.0.0:8181
+      - --set=decision_logs.console=true
+      - /policies
+    volumes:
+      - /opt/oss-governance-for-mem0/policies:/policies:ro
+    ports:
+      - "9001:8181"
+    restart: unless-stopped
+
+  # --------------------------------------------------
+  # Loki (OPTIONAL BUT RECOMMENDED FOR AUDIT LOGS)
+  # --------------------------------------------------
   loki:
     image: grafana/loki:2.9.0
     container_name: gov_mem0_loki
-    ports:
-      - "3100:3100"
     command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "9004:3100"
+    restart: unless-stopped
 
+  # --------------------------------------------------
+  # Grafana (PERSISTENT – AUDIT DASHBOARDS)
+  # --------------------------------------------------
   grafana:
     image: grafana/grafana:10.2.0
     container_name: gov_mem0_grafana
     ports:
-      - "3000:3000"
+      - "9003:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
     depends_on:
       - loki
+    restart: unless-stopped
 
+# --------------------------------------------------
+# Persistent Volumes
+# --------------------------------------------------
 volumes:
-  postgres_data:
+  keycloak_data:
+  grafana_data:
