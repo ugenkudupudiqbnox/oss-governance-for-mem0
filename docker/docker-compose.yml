@@ -93,18 +93,25 @@ services:
     restart: unless-stopped
 
   # --------------------------------------------------
-  # API Gateway (NGINX with OPA auth)
+  # API Gateway (Custom middleware with OPA + Audit)
   # --------------------------------------------------
   gateway:
-    image: nginx:alpine
+    build:
+      context: /opt/oss-governance-for-mem0/gateway/middleware
+      dockerfile: Dockerfile
     container_name: gov_mem0_gateway
-    volumes:
-      - /opt/oss-governance-for-mem0/gateway/nginx.conf:/etc/nginx/nginx.conf:ro
+    environment:
+      - OPA_URL=http://opa:8181/v1/data/mem0/authz/allow
+      - MEM0_URL=http://mem0:8000
+      - DB_HOST=audit-db
+      - DB_NAME=audit
+      - DB_USER=audit
+      - DB_PASS=audit
     ports:
-      - "9000:80"
+      - "9000:8080"
     depends_on:
-      - mem0
       - opa
+      - audit-db
     restart: unless-stopped
 
   # --------------------------------------------------
@@ -163,9 +170,6 @@ services:
       GF_AUTH_GENERIC_OAUTH_ALLOW_SIGN_UP: "true"
       GF_AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_PATH: "contains(roles[*], 'admin') && 'Admin' || contains(roles[*], 'auditor') && 'Viewer' || 'Viewer'"
       GF_AUTH_SIGNOUT_REDIRECT_URL: https://iam.audit.qbnox.com/realms/mem0-governance/protocol/openid-connect/logout?client_id=grafana&post_logout_redirect_uri=https%3A%2F%2Fgrafana.audit.qbnox.com%2Flogin
-
-      # Disable default login form (optional - remove if you want both)
-      # GF_AUTH_DISABLE_LOGIN_FORM: "true"
     depends_on:
       - loki
     restart: unless-stopped
