@@ -1,6 +1,6 @@
 package mem0.authz
 
-test_reader_can_read {
+test_reader_can_read if {
   allow with input as {
     "action": "read",
     "roles": ["agent-reader"],
@@ -9,7 +9,7 @@ test_reader_can_read {
   }
 }
 
-test_reader_cannot_write {
+test_reader_cannot_write if {
   not allow with input as {
     "action": "write",
     "roles": ["agent-reader"],
@@ -18,7 +18,7 @@ test_reader_cannot_write {
   }
 }
 
-test_writer_can_write {
+test_writer_can_write if {
   allow with input as {
     "action": "write",
     "roles": ["agent-writer"],
@@ -26,3 +26,4 @@ test_writer_can_write {
     "resource_tenant": "t1"
   }
 }
+
