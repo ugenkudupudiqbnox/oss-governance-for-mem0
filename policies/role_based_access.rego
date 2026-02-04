@@ -1,35 +1,32 @@
 package mem0.authz
 
-# Default deny
-default allow = false
-
 # Admin: full access
-allow {
+allow if {
   "admin" in input.roles
 }
 
-# Reader: read-only access
-allow {
+# Reader: read-only, same tenant
+allow if {
   input.action == "read"
   "agent-reader" in input.roles
   input.tenant == input.resource_tenant
 }
 
-# Writer: read and write access
-allow {
-  input.action == "write"
-  "agent-writer" in input.roles
-  input.tenant == input.resource_tenant
-}
-
-allow {
+# Writer: read + write, same tenant
+allow if {
   input.action == "read"
   "agent-writer" in input.roles
   input.tenant == input.resource_tenant
 }
 
-# Auditor: read audit logs only
-allow {
+allow if {
+  input.action == "write"
+  "agent-writer" in input.roles
+  input.tenant == input.resource_tenant
+}
+
+# Auditor: audit logs only
+allow if {
   input.action == "audit_read"
   "auditor" in input.roles
 }
