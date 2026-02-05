@@ -41,21 +41,37 @@ Mem0 is treated strictly as an **external dependency**.
 
 ---
 
+## Getting Started
+
+**New users:** Start with the **[Quick Start Guide](./docs/QUICKSTART.md)** to get up and running in under 10 minutes.
+
+**Documentation:**
+- 📘 [Quick Start Guide](./docs/QUICKSTART.md) - Get started in 10 minutes
+- 💻 [API Examples - Python](./docs/API_EXAMPLES.md) - curl and Python SDK
+- 🟦 [API Examples - JavaScript/TypeScript](./docs/API_EXAMPLES_JAVASCRIPT.md) - Node.js, Express.js, TypeScript
+- ☕ [API Examples - Java](./docs/API_EXAMPLES_JAVA.md) - OkHttp, Spring Boot, Maven/Gradle
+- 🐹 [API Examples - Go](./docs/API_EXAMPLES_GO.md) - net/http, Gin framework, Go modules
+- 🔧 [Troubleshooting Guide](./docs/TROUBLESHOOTING.md) - Common issues and solutions
+- 📚 [Common Scenarios](./docs/COMMON_SCENARIOS.md) - Multi-tenant, custom roles, production setup
+- 📖 [Full Documentation](./docs/README.md) - Complete documentation index
+
+---
+
 ## Design Principles
 
-- **No Mem0 modifications**  
+- **No Mem0 modifications**
   Governance is enforced around Mem0, not inside it.
 
-- **Security-first defaults**  
+- **Security-first defaults**
   Deny-by-default, least privilege, explicit authorization.
 
-- **Auditability over convenience**  
+- **Auditability over convenience**
   All sensitive actions must be traceable and explainable.
 
-- **Policy-as-code**  
+- **Policy-as-code**
   Authorization and governance rules must be explicit and reviewable.
 
-- **Enterprise-ready**  
+- **Enterprise-ready**
   Suitable for security reviews, audits, and compliance assessments.
 
 ---
