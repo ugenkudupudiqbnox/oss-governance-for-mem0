@@ -25,9 +25,19 @@ cd docker && docker compose up -d
 opa test policies/ -v
 ```
 
-### Run Gateway Tests
+### Run Gateway Unit Tests
 ```bash
 cd gateway/middleware && python3 -m pytest test_main.py -v
+```
+
+### Run Gateway Integration Tests
+```bash
+cd gateway/middleware && python3 -m pytest test_integration.py -v
+```
+
+### Run All Gateway Tests (Unit + Integration)
+```bash
+cd gateway/middleware && python3 -m pytest -v
 ```
 
 ### Service Ports (Local Development)
@@ -137,11 +147,22 @@ Detailed mappings are in `compliance/controls-mapping.md`.
 - HTTP method mapping: GET→`read`, POST/PUT/PATCH→`write`, DELETE→`delete`
 
 ### Testing patterns
-- Gateway tests: `test_{module}.py` alongside source, pytest + `unittest.mock`
-- Mock `check_opa` and `log_audit` to isolate from OPA and PostgreSQL
-- Path traversal tested via direct `validate_request()` call (Starlette normalizes `../` before handler)
-- Rate limit state cleared between tests via `autouse` fixture
-- 29 total tests: 3 OPA (rego) + 26 gateway (pytest)
+- **Unit tests** (`test_main.py`): 26 tests using pytest + `unittest.mock`
+  - Mock `check_opa` and `log_audit` to isolate from OPA and PostgreSQL
+  - Path traversal tested via direct `validate_request()` call (Starlette normalizes `../` before handler)
+  - Rate limit state cleared between tests via `autouse` fixture
+  - Run without Docker stack: `pytest test_main.py -v`
+
+- **Integration tests** (`test_integration.py`): 25 tests against real services
+  - Requires Docker stack running: `cd docker && docker compose up -d`
+  - Tests Gateway (9000) → OPA (9001) → Audit DB (9005)
+  - Validates full RBAC, rate limiting, audit logging, tenant isolation
+  - Timestamp-based audit log cleanup between tests
+  - Service health checks prevent false failures
+  - Run with: `pytest test_integration.py -v`
+
+- **Shared fixtures** (`conftest.py`): DB connection, cleanup, service checks, role headers
+- **Total tests**: 3 OPA (rego) + 26 gateway unit + 25 gateway integration = 54 tests
 
 ### Naming conventions
 - OPA: `{name}.rego`, tests `{name}_test.rego` in `policies/tests/`
