@@ -107,6 +107,12 @@ services:
       - DB_NAME=audit
       - DB_USER=audit
       - DB_PASS=audit
+      # Rate limiting
+      - RATE_LIMIT_REQUESTS=100
+      - RATE_LIMIT_WINDOW_SECONDS=60
+      - RATE_LIMIT_ADMIN_REQUESTS=500
+      # Request validation
+      - MAX_BODY_SIZE_BYTES=1048576
     ports:
       - "9000:8080"
     depends_on:
