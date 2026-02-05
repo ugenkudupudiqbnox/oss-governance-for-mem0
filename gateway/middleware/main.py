@@ -126,6 +126,10 @@ async def check_opa(input_data: dict) -> bool:
             print(f"OPA check error: {e}")
             return False
 
+@app.get("/health")
+async def health():
+    return {"status": "healthy"}
+
 @app.api_route("/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
 async def proxy(request: Request, path: str):
     # Extract user info from headers (set by Keycloak/OAuth proxy)
@@ -210,10 +214,6 @@ async def proxy(request: Request, path: str):
                 status_code=500,
                 content={"error": str(e)}
             )
-
-@app.get("/health")
-async def health():
-    return {"status": "healthy"}
 
 if __name__ == "__main__":
     import uvicorn
