@@ -90,6 +90,23 @@ High-level responsibilities:
 
 Mem0 remains unchanged and unaware of these controls.
 
+```
+Client → FastAPI Gateway (9000) → OPA Policy Check (9001) → Mem0 (9006)
+                ↓
+         Audit Log (PostgreSQL 9005)
+                ↓
+         Grafana/Loki (9003/9004)
+```
+
+**Key Layers:**
+1. **IAM** (`iam/keycloak/`): Keycloak OIDC realm with RBAC roles
+2. **Policy** (`policies/`): OPA Rego rules for authorization
+3. **Audit** (`audit/`): PostgreSQL schema for immutable audit trails
+4. **Gateway** (`gateway/middleware/`): FastAPI proxy with OPA auth, rate limiting, request validation, and audit logging
+5. **Observability** (`observability/`): Grafana dashboards for audit events
+
+**RBAC Roles:** `admin`, `agent-writer`, `agent-reader`, `auditor`
+
 ---
 
 ## Technology Stack (Reference)
