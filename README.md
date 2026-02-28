@@ -56,6 +56,7 @@ Mem0 is treated strictly as an **external dependency**.
 - 📖 [Full Documentation](./docs/README.md) - Complete documentation index
 - 🛡️ [OPA Quick Start Developers](./docs/OPA_QUICKSTART.md) - Policy engine basics for developers
 - 🕵️ [Quick Start Guide: Auditors](./docs/QUICKSTART_AUDITOR.md) - Compliance, audit log, and evidence export
+ - 🏗️ [Architecture Guide](./docs/ARCHITECTURE_GUIDE.md) - Detailed architecture for developers & integrators
 
 ---
 

@@ -30,24 +30,30 @@ New to the project? Start here:
 
 ## Guides
 
+
 ### Common Tasks
 
 - **[Common Scenarios](./COMMON_SCENARIOS.md)**
-  - Multi-tenant SaaS setup
-  - Custom RBAC roles
-  - Production rate limiting with Redis
-  - Integrating with existing Mem0
-  - Compliance audit workflows
-  - High availability deployment
-  - Time-based access policies
+   - Multi-tenant SaaS setup
+   - Custom RBAC roles
+   - Production rate limiting with Redis
+   - Integrating with existing Mem0
+   - Compliance audit workflows
+   - High availability deployment
+   - Time-based access policies
 
 - **[Troubleshooting Guide](./TROUBLESHOOTING.md)**
-  - Service startup issues
-  - Gateway errors (400, 403, 429, 503)
-  - OPA policy debugging
-  - Database connection problems
-  - Port conflicts
-  - Performance tuning
+   - Service startup issues
+   - Gateway errors (400, 403, 429, 503)
+   - OPA policy debugging
+   - Database connection problems
+   - Port conflicts
+   - Performance tuning
+
+### Architecture & Integration
+
+- **[Architecture Guide](./ARCHITECTURE_GUIDE.md)**
+   - Detailed architecture, integration points, and design patterns for developers and integrators
 
 ### Programming Languages
 

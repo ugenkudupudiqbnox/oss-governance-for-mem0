@@ -159,6 +159,8 @@ services:
       - "9003:3000"
     volumes:
       - grafana_data:/var/lib/grafana
+      - ./dashboards:/etc/grafana/dashboards:ro
+      - ./grafana-provisioning-dashboards.yaml:/etc/grafana/provisioning/dashboards/auditor.yaml:ro
     environment:
       # Grafana server settings
       GF_SERVER_ROOT_URL: https://grafana.audit.qbnox.com

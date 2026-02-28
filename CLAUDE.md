@@ -43,7 +43,7 @@ cd gateway/middleware && python3 -m pytest -v
 ### Service Ports (Local Development)
 - Gateway (API): http://localhost:9000
 - OPA (Policy Engine): http://localhost:9001
-- Keycloak (IAM): http://localhost:9002 (admin/admin)
+- Keycloak (IAM): http://localhost:9002 (set admin credentials via environment/secrets; do not use hardcoded defaults in shared environments)
 - Grafana (Dashboards): http://localhost:9003
 - Loki (Logs): http://localhost:9004
 - Audit DB (PostgreSQL): localhost:9005
@@ -222,7 +222,7 @@ gateway:
 
 **Files to modify:**
 - `docker/docker-compose.yml` - Add encrypted volume configuration
-- `audit/init.sql` - Add pgcrypto extension if using column-level encryption
+- `audit/audit_log_schema.sql` - Add pgcrypto extension if using column-level encryption (or create a dedicated init SQL file and reference it in compose)
 
 ---
 
@@ -395,11 +395,13 @@ gateway:
 
 ## HIPAA Compliance Summary
 
-**Current State:** ~40% HIPAA compliant
+**Current State (as of 2026-02-28):** Partially HIPAA-ready; not HIPAA compliant out-of-box
 - ✅ Audit logging (100%)
 - ✅ Access control framework (80% - missing authentication, session mgmt)
 - ❌ Encryption (0% - neither in-transit nor at-rest)
 - ⚠️ Administrative safeguards (30% - some docs, missing procedures)
+
+Status percentages above are directional engineering estimates for planning, not a legal/compliance attestation.
 
 **Estimated Work:** 6-8 weeks for full HIPAA compliance (Phases 1-3 + testing)
 
